@@ -16,7 +16,7 @@ public class LadderGamePriority extends LadderGame{
         }
 
         int enqueues = 0;
-        WordInfoPriority partialSolution = new WordInfoPriority(start, 0, 1 + diff(start, end), start);
+        WordInfoPriority partialSolution = new WordInfoPriority(start, 0, start.length() - diff(start, end), start);
         AVLTree partialSolutionTree = new AVLTree();
         partialSolutionTree.insert(partialSolution);
         enqueues++;
@@ -31,7 +31,7 @@ public class LadderGamePriority extends LadderGame{
             for (String word : solutionList) {
                 String stringHistory = dequeueSolution.getHistory() + " " + word;
                 int newMoves = dequeueSolution.getMoves() + 1;
-                WordInfoPriority newPartialSolution = new WordInfoPriority(word, newMoves, newMoves + diff(word, end),stringHistory);
+                WordInfoPriority newPartialSolution = new WordInfoPriority(word, newMoves, newMoves + start.length() - diff(word, end),stringHistory);
 
                 if (newPartialSolution.getWord().compareTo(end) == 0) {
                     System.out.printf("Seeking A* solution from %s => %s\n\t[%s] total enqueues %d\n", start, end, newPartialSolution.getHistory(), enqueues);
@@ -70,7 +70,7 @@ public class LadderGamePriority extends LadderGame{
             } else if (wordInfo.getWord().compareTo(words.get(value).getWord()) > 0) {
                 return binarySearch(words, wordInfo, value + 1, max);
             } else {
-                return binarySearch(words, wordInfo, min, value - 1);
+                return binarySearch(words, wordInfo, min, value);
             }
         }
         return false;
